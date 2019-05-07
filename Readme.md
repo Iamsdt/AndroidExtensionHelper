@@ -7,4 +7,5 @@ allprojects {
 		}
 	}
 
-implementation 'com.github.Iamsdt:AndroidExtensionHelper:v1.0'
+
+implementation 'com.github.Iamsdt:AndroidExtensionHelper:v1.5'
