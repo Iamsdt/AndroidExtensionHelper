@@ -7,7 +7,6 @@
 
 package com.iamsdt.androidextension
 
-import android.util.Log
 import androidx.annotation.MainThread
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
