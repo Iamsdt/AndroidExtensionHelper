@@ -13,12 +13,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.lang.Thread.sleep
 import kotlin.concurrent.thread
 
 inline fun <reified T : AppCompatActivity> AppCompatActivity.nextActivity(
-    extraKey: String = "", extra: Any = "", finish: Boolean = false
+    extraKey: String = "", extra: Any = "", finish: Boolean = false,
+    list: List<Pair<String, Any>> = emptyList()
 ) {
 
     val intent = Intent(this, T::class.java)
@@ -32,6 +34,18 @@ inline fun <reified T : AppCompatActivity> AppCompatActivity.nextActivity(
             is Int -> intent.putExtra(extraKey, extra)
             is Bundle -> intent.putExtra(extraKey, extra)
             else -> intent.putExtra(extraKey, "$extra")
+        }
+    } else if (list.isNotEmpty()) {
+        list.forEach {
+            when (val extras = it.second) {
+                is String -> intent.putExtra(it.first, extras)
+                is Boolean -> intent.putExtra(it.first, extras)
+                is Float -> intent.putExtra(it.first, extras)
+                is Long -> intent.putExtra(it.first, extras)
+                is Int -> intent.putExtra(it.first, extras)
+                is Bundle -> intent.putExtra(it.first, extras)
+                else -> intent.putExtra(it.first, "$extras")
+            }
         }
     }
 
@@ -50,14 +64,13 @@ inline fun <reified T : AppCompatActivity> AppCompatActivity.runThread(timer: Lo
 
 inline fun <reified T : AppCompatActivity> AppCompatActivity.runThreadK(timer: Long = 1000) {
     GlobalScope.launch {
-        sleep(timer)
-        nextActivity<T>()
-        finish()
+        delay(timer)
+        nextActivity<T>(finish = true)
     }
 }
 
 inline fun <reified T : AppCompatActivity> Fragment.nextActivity(
-    extraKey: String = "", extra: Any = ""
+    extraKey: String = "", extra: Any = "", list: List<Pair<String, Any>> = emptyList()
 ) {
     val intent = Intent(activity, T::class.java)
 
@@ -70,6 +83,18 @@ inline fun <reified T : AppCompatActivity> Fragment.nextActivity(
             is Int -> intent.putExtra(extraKey, extra)
             is Bundle -> intent.putExtra(extraKey, extra)
             else -> intent.putExtra(extraKey, "$extra")
+        }
+    } else if (list.isNotEmpty()) {
+        list.forEach {
+            when (val extras = it.second) {
+                is String -> intent.putExtra(it.first, extras)
+                is Boolean -> intent.putExtra(it.first, extras)
+                is Float -> intent.putExtra(it.first, extras)
+                is Long -> intent.putExtra(it.first, extras)
+                is Int -> intent.putExtra(it.first, extras)
+                is Bundle -> intent.putExtra(it.first, extras)
+                else -> intent.putExtra(it.first, "$extras")
+            }
         }
     }
 
