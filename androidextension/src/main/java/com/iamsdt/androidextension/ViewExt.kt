@@ -48,17 +48,25 @@ fun Window.layout(size: Int) {
     }
 }
 
-fun AppCompatTextView.addText(string: String) {
+fun AppCompatTextView.addTextK(string: String) {
     GlobalScope.launch(Dispatchers.Main) {
         val text = withContext(Dispatchers.IO) {
-            val params = TextViewCompat.getTextMetricsParams(this@addText)
+            val params = TextViewCompat.getTextMetricsParams(this@addTextK)
             PrecomputedTextCompat.create(string, params)
         }
         setPrecomputedText(text)
     }
 }
 
-@Deprecated("Use AppCompatTextView.addText method")
+fun AppCompatTextView.addText(string: String) {
+    AsyncTask.execute {
+        val params = TextViewCompat.getTextMetricsParams(this)
+        val text = PrecomputedTextCompat.create(string, params)
+        setPrecomputedText(text)
+    }
+}
+
+@Deprecated("Use AppCompatTextView.addTextK() method")
 fun TextView.addStrK(string: String) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         val params = this.textMetricsParams
