@@ -40,25 +40,10 @@ fun Fragment.showToasty(
     time: Int = Toast.LENGTH_SHORT,
     withIcon: Boolean = true
 ) {
-
     when (type) {
         ToastType.INFO -> Toasty.info(context!!, message, time, withIcon).show()
         ToastType.ERROR -> Toasty.error(context!!, message, time, withIcon).show()
         ToastType.SUCCESSFUL -> Toasty.success(context!!, message, time, withIcon).show()
         ToastType.WARNING -> Toasty.warning(context!!, message, time, withIcon).show()
     }
-}
-
-fun AppCompatActivity.showToast(
-    message: String,
-    time: Int = Toast.LENGTH_SHORT
-) {
-    Toast.makeText(this, message, time).show()
-}
-
-fun Fragment.showToast(
-    message: String,
-    time: Int = Toast.LENGTH_SHORT
-) {
-    Toast.makeText(context, message, time).show()
 }

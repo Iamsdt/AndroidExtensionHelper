@@ -13,6 +13,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.*
+import android.net.NetworkCapabilities.TRANSPORT_CELLULAR
+import android.net.NetworkCapabilities.TRANSPORT_WIFI
+import android.os.Build
 import androidx.lifecycle.LiveData
 
 
@@ -26,15 +29,25 @@ object NetworkLiveData : LiveData<Boolean>() {
     fun init(application: Application) {
         this.application = application
         networkRequest = NetworkRequest.Builder()
-            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .addTransportType(TRANSPORT_CELLULAR)
+            .addTransportType(TRANSPORT_WIFI)
             .build()
     }
 
     fun isNetworkAvaiable(): Boolean {
         val cm = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = cm.activeNetworkInfo
-        return activeNetwork != null && activeNetwork.isConnected
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = cm.activeNetwork
+            val activeNetwork = cm.getNetworkCapabilities(network)
+            (activeNetwork?.hasTransport(TRANSPORT_CELLULAR) ?: false
+                    || activeNetwork?.hasTransport(TRANSPORT_WIFI) ?: false)
+        } else {
+            @Suppress("DEPRECATION")
+            val activeNetwork = cm.activeNetworkInfo
+            @Suppress("DEPRECATION")
+            activeNetwork != null && activeNetwork.isConnected
+        }
     }
 
     override fun onActive() {
@@ -46,7 +59,7 @@ object NetworkLiveData : LiveData<Boolean>() {
     private fun getDetails() {
         val cm = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         cm.registerNetworkCallback(networkRequest, object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network?) {
+            override fun onAvailable(network: Network) {
                 super.onAvailable(network)
                 postValue(true)
             }
@@ -56,7 +69,7 @@ object NetworkLiveData : LiveData<Boolean>() {
                 postValue(false)
             }
 
-            override fun onLost(network: Network?) {
+            override fun onLost(network: Network) {
                 super.onLost(network)
                 postValue(false)
             }
