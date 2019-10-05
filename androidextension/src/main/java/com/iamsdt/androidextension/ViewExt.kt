@@ -8,13 +8,10 @@
 package com.iamsdt.androidextension
 
 
-import android.content.res.Configuration
 import android.os.AsyncTask
 import android.os.Build
 import android.text.PrecomputedText
 import android.view.View
-import android.view.ViewGroup
-import android.view.Window
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
@@ -42,10 +39,9 @@ fun View.changeHeight(height: Int) {
     layoutParams.height = height
 }
 
-fun Window.layout(size: Int) {
-    if (context?.resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        setLayout(size, ViewGroup.LayoutParams.MATCH_PARENT)
-    }
+fun View.changeWidth(width: Int) {
+    requestLayout()
+    layoutParams.width = width
 }
 
 fun AppCompatTextView.addTextK(string: String) {
