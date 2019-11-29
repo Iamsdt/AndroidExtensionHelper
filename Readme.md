@@ -2,14 +2,13 @@
 
 Collections of **Extension Function** for **Android**
 
-## Classes
-
+## Docs
 - [Android Views Extension]()
 - [Android Activity Extension]()
 - [kotlin Coroutine Extension]()
 -  [Android Network Extension]()
 - [Live Data Extension]()
-- [Conveters Extension]()
+- [Converters Extension]()
 
 ## How to Config
 
@@ -30,14 +29,4 @@ Add this line in your app level **build.gradle** file
 implementation 'com.github.Iamsdt:AndroidExtensionHelper:v2.1'
 ```
 
-## Android Views Extension
-
-##### Show View
-
-```kotlin
-val tv:TextView = ...
-//set view as visible
-tv.show()
-```
-
-##### Hide View
+#
